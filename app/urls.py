@@ -14,13 +14,22 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
-from core.views import AutorViewSet, CategoriaViewSet, EditoraViewSet, LivroViewSet, UserRegistrationView, UserViewSet
+from core.views import (
+    AutorViewSet,
+    CategoriaViewSet,
+    CompraViewSet,
+    EditoraViewSet,
+    LivroViewSet,
+    UserRegistrationView,
+    UserViewSet,
+)
 from uploader.router import router as uploader_router
 
 router = DefaultRouter()
 
 router.register(r'autores', AutorViewSet, basename='autores')
 router.register(r'categorias', CategoriaViewSet, basename='categorias')
+router.register(r'compras', CompraViewSet)
 router.register(r'editoras', EditoraViewSet, basename='editoras')
 router.register(r'livros', LivroViewSet, basename='livros')
 router.register(r'usuarios', UserViewSet, basename='usuarios')
@@ -39,7 +48,6 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name='schema'),
         name='redoc',
     ),
-    path('api/media/', include(uploader_router.urls)),
     # Autenticação JWT
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
@@ -48,5 +56,6 @@ urlpatterns = [
     path('api/registro/', UserRegistrationView.as_view(), name='user_registration'),
     # API
     path('api/', include(router.urls)),
+    path('api/media/', include(uploader_router.urls)),  # nova linha
 ]
 urlpatterns += static(settings.MEDIA_ENDPOINT, document_root=settings.MEDIA_ROOT)

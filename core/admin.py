@@ -1,8 +1,8 @@
-from django.contrib.admin import ModelAdmin, register
+from django.contrib.admin import ModelAdmin, StackedInline, register
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from core.models import Autor, Categoria, Editora, Livro, User
+from core.models import Autor, Categoria, Compra, Editora, ItensCompra, Livro, User
 
 
 @register(Autor)
@@ -23,6 +23,21 @@ class CategoriaAdmin(ModelAdmin):
     list_per_page = 10
 
 
+class ItensCompraInline(StackedInline):
+    model = ItensCompra
+    extra = 1  # Quantidade de itens adicionais
+
+
+@register(Compra)
+class CompraAdmin(ModelAdmin):
+    list_display = ('usuario', 'status')
+    search_fields = ('usuario', 'status')
+    list_filter = ('usuario', 'status')
+    ordering = ('usuario', 'status')
+    list_per_page = 10
+    inlines = [ItensCompraInline]
+
+
 @register(Editora)
 class EditoraAdmin(ModelAdmin):
     list_display = ('nome', 'email', 'cidade')
@@ -35,7 +50,7 @@ class EditoraAdmin(ModelAdmin):
 @register(Livro)
 class LivroAdmin(ModelAdmin):
     list_display = ('titulo', 'editora', 'categoria', 'preco')
-    search_fields = ('titulo', 'editora__nome', 'categoria__descricao')
+    search_fields = ('titulo', 'editora_nome', 'categoria_descricao')
     list_filter = ('editora', 'categoria')
     ordering = ('titulo', 'editora', 'categoria')
     list_per_page = 25

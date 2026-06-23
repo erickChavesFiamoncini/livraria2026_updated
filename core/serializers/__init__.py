@@ -1,5 +1,9 @@
-from .user import UserRegistrationSerializer, UserSerializer
-from .autor import AutorSerializer
-from .categoria import CategoriaSerializer
-from .editora import EditoraSerializer
-from .livro import LivroSerializer, LivroRetrieveSerializer, LivroListSerializer
+from .autor import AutorSerializer as AutorSerializer
+from .categoria import CategoriaSerializer as CategoriaSerializer
+from .compra import CompraSerializer as CompraSerializer
+from .editora import EditoraSerializer as EditoraSerializer
+from .livro import LivroListSerializer as LivroListSerializer
+from .livro import LivroRetrieveSerializer as LivroRetrieveSerializer
+from .livro import LivroSerializer as LivroSerializer
+from .user import UserRegistrationSerializer as UserRegistrationSerializer
+from .user import UserSerializer as UserSerializer
