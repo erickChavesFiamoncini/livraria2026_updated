@@ -29,7 +29,7 @@ router = DefaultRouter()
 
 router.register(r'autores', AutorViewSet, basename='autores')
 router.register(r'categorias', CategoriaViewSet, basename='categorias')
-router.register(r'compras', CompraViewSet)
+router.register(r'compras', CompraViewSet, basename='compra')
 router.register(r'editoras', EditoraViewSet, basename='editoras')
 router.register(r'livros', LivroViewSet, basename='livros')
 router.register(r'usuarios', UserViewSet, basename='usuarios')
