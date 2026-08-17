@@ -1,6 +1,12 @@
-from email.policy import default
 
-from rest_framework.serializers import CharField, ModelSerializer, SerializerMethodField, CurrentUserDefault, HiddenField, ValidationError
+from rest_framework.serializers import (
+    CharField,
+    CurrentUserDefault,
+    HiddenField,
+    ModelSerializer,
+    SerializerMethodField,
+    ValidationError,
+)
 
 from core.models import Compra, ItensCompra
 
