@@ -1,4 +1,4 @@
-
+from django.db import transaction
 from rest_framework.serializers import (
     CharField,
     CurrentUserDefault,
@@ -14,7 +14,7 @@ from core.models import Compra, ItensCompra
 class ItensCompraCreateUpdateSerializer(ModelSerializer):
     class Meta:
         model = ItensCompra
-        fields = ('livro', 'quantidade')
+        fields = ('livro', 'quantidade', 'preco')
 
     def validate_quantidade(self, quantidade):
         if quantidade <= 0:
@@ -32,24 +32,23 @@ class ItensCompraListSerializer(ModelSerializer):
 
     class Meta:
         model = ItensCompra
-        fields = ('quantidade', 'livro')
+        fields = ('quantidade', 'preco', 'livro', )
         depth = 1
 
 
 class ItensCompraSerializer(ModelSerializer):
     titulo = CharField(source='livro.titulo', read_only=True)
     editora = CharField(source='livro.editora.nome', read_only=True)
-    preco = CharField(source='livro.preco', read_only=True)
     capa = CharField(source='livro.capa.url', read_only=True)
 
     total = SerializerMethodField()
 
     def get_total(self, instance):
-        return instance.livro.preco * instance.quantidade
+        return instance.quantidade * instance.preco
 
     class Meta:
         model = ItensCompra
-        fields = ('titulo', 'editora', 'quantidade', 'preco', 'total', 'capa')
+        fields = ('titulo', 'editora', 'livro', 'quantidade', 'preco', 'total')
         depth = 1
 
 
@@ -61,20 +60,25 @@ class CompraCreateUpdateSerializer(ModelSerializer):
         model = Compra
         fields = ('id', 'usuario', 'itens')
 
+    @transaction.atomic
     def create(self, validated_data):
-        itens_data = validated_data.pop('itens')
+        itens = validated_data.pop('itens')
         compra = Compra.objects.create(**validated_data)
-        for item_data in itens_data:
-            ItensCompra.objects.create(compra=compra, **item_data)
+        for item in itens:
+            item['preco'] = item['livro'].preco
+            ItensCompra.objects.create(compra=compra, **item)
         compra.save()
         return compra
 
+    @transaction.atomic
     def update(self, compra, validated_data):
-        itens_data = validated_data.pop('itens', [])
-        if itens_data:
+        itens = validated_data.pop('itens')
+        if itens:
             compra.itens.all().delete()
-            for item_data in itens_data:
-                ItensCompra.objects.create(compra=compra, **item_data)
+            for item in itens:
+                item['preco'] = item['livro'].preco  # grava o preço histórico
+                ItensCompra.objects.create(compra=compra, **item)
+        compra.save()
         return super().update(compra, validated_data)
 
 
@@ -94,4 +98,10 @@ class CompraSerializer(ModelSerializer):
 
     class Meta:
         model = Compra
-        fields = ('id', 'usuario', 'status', 'total', 'itens',)
+        fields = (
+            'id',
+            'usuario',
+            'status',
+            'total',
+            'itens',
+        )
