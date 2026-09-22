@@ -30,13 +30,13 @@ class ItensCompraInline(StackedInline):
 
 @register(Compra)
 class CompraAdmin(ModelAdmin):
-    list_display = ('usuario', 'status', 'total_formatado', 'data')
-    ordering = ('usuario', 'status', 'data')
+    list_display = ('usuario', 'status', 'total_formatado', 'data_criacao', 'data_atualizacao')
+    ordering = ('usuario', 'status', 'data_criacao')
     list_per_page = 10
     inlines = [ItensCompraInline]
-    readonly_fields = ("total_formatado", "data")
+    readonly_fields = ('total_formatado', 'data_criacao', 'data_atualizacao')
     search_fields = ('usuario', 'status')
-    list_filter = ('usuario', 'status', 'data')
+    list_filter = ('usuario', 'status', 'data_criacao')
     ordering = ('usuario', 'status')
 
     @display(description="Total")

@@ -1,3 +1,6 @@
+from os import read
+
+from click import DateTime
 from django.db import transaction
 from rest_framework.serializers import (
     CharField,
@@ -95,7 +98,8 @@ class CompraListSerializer(ModelSerializer):
 class CompraSerializer(ModelSerializer):
     usuario = CharField(source='usuario.email', read_only=True)
     status = CharField(source='get_status_display', read_only=True)
-    data = DateTimeField(read_only=True)
+    data_criacao = DateTimeField(read_only=True)
+    data_atualizacao = DateTimeField(read_only=True)
     tipo_pagamento = CharField(source='get_tipo_pagamento_display', read_only=True)
     itens = ItensCompraSerializer(many=True, read_only=True)
 
@@ -106,7 +110,8 @@ class CompraSerializer(ModelSerializer):
             'usuario',
             'status',
             'total',
-            'data',
+            'data_criacao',
+            'data_atualizacao'
             'tipo_pagamento'
             'itens',
         )

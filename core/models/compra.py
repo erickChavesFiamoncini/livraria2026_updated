@@ -11,8 +11,9 @@ class Compra(models.Model):
         PIX = 3, 'PIX'
         BOLETO = 4, 'Boleto'
         TRANSFERENCIA_BANCARIA = 5, 'Transferência Bancária'
-        DINHEIRO = 6, 'Dinheiro'
-        OUTRO = 7, 'Outro'
+        CHEQUE = 6, 'Cheque'
+        DINHEIRO = 7, 'Dinheiro'
+        OUTRO = 8, 'Outro'
     class StatusCompra(models.IntegerChoices):
         CARRINHO = 1, 'Carrinho'
         FINALIZADO = 2, 'Finalizado'
@@ -30,7 +31,9 @@ class Compra(models.Model):
         choices=TipoPagamento.choices,
         default=TipoPagamento.CARTAO_CREDITO
     )
-    data = models.DateTimeField(auto_now_add=True)
+
+    data_criacao = models.DateTimeField(auto_now_add=True)
+    data_atualizacao = models.DateTimeField(auto_now=True)
 
     @property
     def total(self):
