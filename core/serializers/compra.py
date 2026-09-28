@@ -1,6 +1,4 @@
-from os import read
 
-from click import DateTime
 from django.db import transaction
 from rest_framework.serializers import (
     CharField,
@@ -52,7 +50,7 @@ class ItensCompraSerializer(ModelSerializer):
 
     class Meta:
         model = ItensCompra
-        fields = ('titulo', 'editora', 'livro', 'quantidade', 'preco', 'total')
+        fields = ('titulo', 'editora', 'livro', 'capa', 'quantidade', 'preco', 'total')
         depth = 1
 
 
@@ -111,7 +109,7 @@ class CompraSerializer(ModelSerializer):
             'status',
             'total',
             'data_criacao',
-            'data_atualizacao'
-            'tipo_pagamento'
+            'data_atualizacao',
+            'tipo_pagamento',
             'itens',
         )

@@ -30,7 +30,8 @@
     "statusBar.debuggingBackground": "#61b54d",
     "statusBar.debuggingForeground": "#15202b",
     "activityBar.activeBorder": "#15202b",
-    "activityBarTop.activeBorder": "#15202b"
+    "activityBarTop.activeBorder": "#15202b",
+    "statusBar.inactiveBackground": "#61b54d"
   },
   "peacock.color": "#61b54d",
   "[python]": {
