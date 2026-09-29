@@ -13,6 +13,7 @@ from .editora import EditoraSerializer
 from .livro import (
     LivroAlterarPrecoSerializer,
     LivroListSerializer,
+    LivroMaisVendidoSerializer,
     LivroRetrieveSerializer, 
     LivroSerializer,
 )
