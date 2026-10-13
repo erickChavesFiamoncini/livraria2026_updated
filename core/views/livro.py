@@ -1,6 +1,6 @@
 from django.db.models import Q, Sum
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
@@ -19,12 +19,15 @@ from core.serializers import (
 
 
 class LivroViewSet(ModelViewSet):
+    #queryset = Livro.objects.order_by=('')
     queryset = Livro.objects.all()
     serializer_class = LivroSerializer
 
-    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['categoria__descricao', 'editora__nome']  # Campos para filtragem
     search_fields = ['titulo']  # Campos para busca textual
+    ordering_fields = ['titulo', 'preco']
+    ordering = ['titulo']
 
     def get_serializer_class(self):
         if self.action == 'list':

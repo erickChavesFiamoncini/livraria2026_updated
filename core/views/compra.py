@@ -1,5 +1,7 @@
 from django.db import transaction
 from django.utils import timezone
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
@@ -18,6 +20,11 @@ from core.serializers import (
 class CompraViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = CompraSerializer
+    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields = ['usuario__email', 'status', 'data']
+    search_fields = ['usuario__email']
+    ordering_fields = ['usuario__email', 'status', 'data']
+    ordering = ['-data']
 
     def get_queryset(self):
         usuario = self.request.user
