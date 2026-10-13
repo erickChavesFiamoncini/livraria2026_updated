@@ -23,7 +23,7 @@ class LivroAlterarPrecoSerializer(Serializer):
 
 
 class LivroAjustarEstoqueSerializer(Serializer):
-    quantidade = serializer.IntegerField()
+    quantidade = IntegerField()
 
     def validate_quantidade(self, value):
         livro = self.context.get('livro')
