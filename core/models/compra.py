@@ -14,6 +14,7 @@ class Compra(models.Model):
         CHEQUE = 6, 'Cheque'
         DINHEIRO = 7, 'Dinheiro'
         OUTRO = 8, 'Outro'
+
     class StatusCompra(models.IntegerChoices):
         CARRINHO = 1, 'Carrinho'
         FINALIZADO = 2, 'Finalizado'
@@ -22,22 +23,21 @@ class Compra(models.Model):
 
     usuario = models.ForeignKey(User, on_delete=models.PROTECT, related_name='compras')
 
-    status = models.IntegerField(
-        choices=StatusCompra.choices,
-        default=StatusCompra.CARRINHO
-    )
+    status = models.IntegerField(choices=StatusCompra.choices, default=StatusCompra.CARRINHO)
 
-    tipo_pagamento = models.IntegerField(
-        choices=TipoPagamento.choices,
-        default=TipoPagamento.CARTAO_CREDITO
-    )
+    tipo_pagamento = models.IntegerField(choices=TipoPagamento.choices, default=TipoPagamento.CARTAO_CREDITO)
 
     data_criacao = models.DateTimeField(auto_now_add=True)
     data_atualizacao = models.DateTimeField(auto_now=True)
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
-    @property
-    def total(self):
-        return sum(item.preco * item.quantidade for item in self.itens.all())
+
+def save(self, *args, **kwargs):
+    super().save(*args, **kwargs)
+
+    self.total = sum((item.preco * item.quantidade for item in self.itens.all()), start=0)
+
+    super().save(update_fields=['total'])
 
 
 class ItensCompra(models.Model):
