@@ -9,3 +9,8 @@ from core.serializers import AutorSerializer
 class AutorViewSet(ModelViewSet):
     queryset = Autor.objects.all()
     serializer_class = AutorSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['nome', 'email']  # Campos para filtragem
+    search_fields = ['nome']  # Campos para busca textual
+    ordering_fields = ['nome', 'email']
+    ordering = ['nome']
